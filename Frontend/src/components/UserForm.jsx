@@ -10,6 +10,8 @@ const UserForm = ({ onSubmit }) => {
         healthGoals: '',
     });
 
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUserData((prevData) => ({ ...prevData, [name]: value }));
@@ -18,7 +20,7 @@ const UserForm = ({ onSubmit }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/users', {
+            const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
