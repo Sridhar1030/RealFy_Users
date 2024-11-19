@@ -1,3 +1,7 @@
+import { db } from "../config/firebaseConfig.js";
+
+const userCollection = db.collection("users");
+
 export const UserModel = {
 	create: (data) => userCollection.doc().set(data),
 	findById: (id) => userCollection.doc(id).get(),

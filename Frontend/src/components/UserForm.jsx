@@ -23,12 +23,22 @@ const UserForm = ({ onSubmit }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
             });
+
+            // Parse the response
             const data = await response.json();
+
+            // Check for errors
+            if (!response.ok) {
+                throw new Error(data.message || 'An unknown error occurred.');
+            }
+
+            // Success: User created
             alert(`User ${data.name} created successfully!`);
-            onSubmit();
+            onSubmit(); // Call the onSubmit handler for parent component actions
         } catch (error) {
+            // Handle error case
             console.error('Error:', error);
-            alert('An error occurred.');
+            alert(error.message); // Display error message in the alert
         }
     };
 
