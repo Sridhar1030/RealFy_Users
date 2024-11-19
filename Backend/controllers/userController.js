@@ -4,12 +4,10 @@ export const createUser = async (req, res) => {
 	try {
 		const { name, email, age, weight, height, healthGoals } = req.body;
 
-		// Validate required fields
 		if (!name || !email || !age || !weight || !height || !healthGoals) {
 			return res.status(400).json({ message: "All fields are required" });
 		}
 
-		// Check for existing user with the same email
 		const existingUserSnapshot = await UserModel.findByEmail(email);
 		if (!existingUserSnapshot.empty) {
 			return res
@@ -17,7 +15,6 @@ export const createUser = async (req, res) => {
 				.json({ message: "User with this email already exists" });
 		}
 
-		// Create the new user
 		const newUser = {
 			name,
 			email,
@@ -113,20 +110,15 @@ export const searchUsersByName = async (req, res) => {
 
 	try {
 		// Get all users from Firestore
-		const snapshot = await UserModel.getAll(); // Returns a QuerySnapshot
-
-		// Extract documents from the QuerySnapshot
+		const snapshot = await UserModel.getAll(); 
 		const users = snapshot.docs.map((doc) => ({
 			id: doc.id,
-			...doc.data(), // Get the user data from each document
-		}));
+			...doc.data(), 		}));
 
-		// Log users to check the format
 		console.log("Users data:", users);
 
-		// Filter users based on the name query using regex for case-insensitive match
 		const filteredUsers = users.filter(
-			(user) => user.name.match(new RegExp(name, "i")) // 'i' for case-insensitive matching
+			(user) => user.name.match(new RegExp(name, "i")) 
 		);
 
 		if (filteredUsers.length === 0) {
