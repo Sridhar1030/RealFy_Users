@@ -1,6 +1,5 @@
 import { UserModel } from "../models/userModel.js";
 
-// Method to create a user
 export const createUser = async (req, res) => {
 	try {
 		const { name, email, age, weight, height, healthGoals } = req.body;
@@ -30,7 +29,6 @@ export const createUser = async (req, res) => {
 		};
 
 		await UserModel.create(newUser);
-
 		res.status(201).json(newUser);
 	} catch (error) {
 		console.error("Error creating user:", error);
@@ -38,14 +36,12 @@ export const createUser = async (req, res) => {
 	}
 };
 
-// Method to update a user
 export const updateUser = async (req, res) => {
 	const { id } = req.params;
 	const { name, email, age, weight, height, healthGoals } = req.body;
 
 	try {
 		const userDoc = await UserModel.findById(id);
-
 		if (!userDoc.exists) {
 			return res.status(404).json({ message: "User not found" });
 		}
@@ -74,7 +70,6 @@ export const updateUser = async (req, res) => {
 	}
 };
 
-// Method to get all users
 export const getAllUsers = async (req, res) => {
 	try {
 		const snapshot = await UserModel.getAll();
@@ -90,19 +85,16 @@ export const getAllUsers = async (req, res) => {
 	}
 };
 
-// Method to delete a user
 export const deleteUser = async (req, res) => {
 	const { id } = req.params;
 
 	try {
 		const userDoc = await UserModel.findById(id);
-
 		if (!userDoc.exists) {
 			return res.status(404).json({ message: "User not found" });
 		}
 
 		await UserModel.deleteById(id);
-
 		res.status(200).json({ message: `User with ID ${id} deleted` });
 	} catch (error) {
 		console.error("Error deleting user:", error);
@@ -110,7 +102,6 @@ export const deleteUser = async (req, res) => {
 	}
 };
 
-// Method to search users by name
 export const searchUsersByName = async (req, res) => {
 	const { name } = req.query;
 
@@ -121,22 +112,30 @@ export const searchUsersByName = async (req, res) => {
 	}
 
 	try {
-		// Use Firestore query for case-insensitive partial match
-		const snapshot = await UserModel.getByName(name);
+		// Get all users from Firestore
+		const snapshot = await UserModel.getAll(); // Returns a QuerySnapshot
 
-		// Map Firestore results to an array of user objects
+		// Extract documents from the QuerySnapshot
 		const users = snapshot.docs.map((doc) => ({
 			id: doc.id,
-			...doc.data(),
+			...doc.data(), // Get the user data from each document
 		}));
 
-		if (users.length === 0) {
+		// Log users to check the format
+		console.log("Users data:", users);
+
+		// Filter users based on the name query using regex for case-insensitive match
+		const filteredUsers = users.filter(
+			(user) => user.name.match(new RegExp(name, "i")) // 'i' for case-insensitive matching
+		);
+
+		if (filteredUsers.length === 0) {
 			return res
 				.status(404)
 				.json({ message: "No users found with that name" });
 		}
 
-		res.status(200).json(users);
+		res.status(200).json(filteredUsers);
 	} catch (error) {
 		console.error("Error searching users:", error);
 		res.status(500).json({ message: "Error searching users" });
