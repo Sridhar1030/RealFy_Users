@@ -10,6 +10,12 @@ app.use(cors());
 // Routes
 app.use("/users", userRoutes);
 
+//test route
+app.get("/", (req, res) => {
+	res.send("Hello World!");
+}
+);
+
 // Start the server
 app.listen(3000, () => {
 	console.log("Server running on http://localhost:3000");
