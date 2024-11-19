@@ -17,7 +17,7 @@ const UserManagement = () => {
     const handleSearch = async () => {
         try {
             const response = await fetch(
-                `http://localhost:3000/users/search/name?name=${searchName}`  // Fix URL here
+                `${import.meta.env.VITE_BACKEND_URL}/search/name?name=${searchName}`
             );
             if (!response.ok) {
                 const error = await response.json();
@@ -32,13 +32,12 @@ const UserManagement = () => {
         }
     };
 
-
     // Delete user
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this user?")) return;
 
         try {
-            const response = await fetch(`http://localhost:3000/users/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${id}`, {
                 method: "DELETE",
             });
             if (!response.ok) {
@@ -59,7 +58,7 @@ const UserManagement = () => {
         e.preventDefault();
         try {
             const response = await fetch(
-                `http://localhost:3000/users/${selectedUser.id}`,
+                `${import.meta.env.VITE_BACKEND_URL}/${selectedUser.id}`,
                 {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },

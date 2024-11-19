@@ -5,7 +5,8 @@ import UserSearch from "./components/UserSearch";
 import UserList from "./components/UserList";
 import UserManagement from "./components/UserManagment";
 
-const API_URL = "http://localhost:3000/users";
+// Use the environment variable for the API URL
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 const App = () => {
   const [users, setUsers] = useState([]);
