@@ -109,7 +109,6 @@ export const searchUsersByName = async (req, res) => {
 	}
 
 	try {
-		// Get all users from Firestore
 		const snapshot = await UserModel.getAll(); 
 		const users = snapshot.docs.map((doc) => ({
 			id: doc.id,
