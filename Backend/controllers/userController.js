@@ -99,6 +99,41 @@ export const deleteUser = async (req, res) => {
 	}
 };
 
+// export const searchUsersByName = async (req, res) => {
+// 	const { name } = req.query;
+
+// 	if (!name) {
+// 		return res
+// 			.status(400)
+// 			.json({ message: "Name query parameter is required" });
+// 	}
+
+// 	try {
+// 		const snapshot = await UserModel.getAll(); 
+// 		const users = snapshot.docs.map((doc) => ({
+// 			id: doc.id,
+// 			...doc.data(), 		}));
+
+// 		console.log("Users data:", users);
+
+// 		const filteredUsers = users.filter(
+// 			(user) => user.name.match(new RegExp(name, "i")) 
+// 		);
+
+// 		if (filteredUsers.length === 0) {
+// 			return res
+// 				.status(404)
+// 				.json({ message: "No users found with that name" });
+// 		}
+
+// 		res.status(200).json(filteredUsers);
+// 	} catch (error) {
+// 		console.error("Error searching users:", error);
+// 		res.status(500).json({ message: "Error searching users" });
+// 	}
+// };
+
+
 export const searchUsersByName = async (req, res) => {
 	const { name } = req.query;
 
@@ -109,24 +144,23 @@ export const searchUsersByName = async (req, res) => {
 	}
 
 	try {
-		const snapshot = await UserModel.getAll(); 
+		const snapshot = await UserModel.findByName(name);
+
 		const users = snapshot.docs.map((doc) => ({
 			id: doc.id,
-			...doc.data(), 		}));
+			...doc.data(),
+		}));
 
-		console.log("Users data:", users);
 
-		const filteredUsers = users.filter(
-			(user) => user.name.match(new RegExp(name, "i")) 
-		);
 
-		if (filteredUsers.length === 0) {
+		
+		if (users.length === 0) {
 			return res
 				.status(404)
 				.json({ message: "No users found with that name" });
 		}
 
-		res.status(200).json(filteredUsers);
+		res.status(200).json(users);
 	} catch (error) {
 		console.error("Error searching users:", error);
 		res.status(500).json({ message: "Error searching users" });

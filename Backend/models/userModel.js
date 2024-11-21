@@ -9,4 +9,5 @@ export const UserModel = {
 	deleteById: (id) => userCollection.doc(id).delete(),
 	getAll: () => userCollection.get(),
 	findByEmail: (email) => userCollection.where("email", "==", email).get(),
+	findByName: (name) => userCollection.where("name", "==", name).get(),
 };
