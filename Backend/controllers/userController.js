@@ -152,8 +152,6 @@ export const searchUsersByName = async (req, res) => {
 		}));
 
 
-
-		
 		if (users.length === 0) {
 			return res
 				.status(404)
