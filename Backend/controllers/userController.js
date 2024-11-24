@@ -142,7 +142,6 @@ export const searchUsersByName = async (req, res) => {
 			.status(400)
 			.json({ message: "Name query parameter is required" });
 	}
-
 	try {
 		const snapshot = await UserModel.findByName(name);
 
